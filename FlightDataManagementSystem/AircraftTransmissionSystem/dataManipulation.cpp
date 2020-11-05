@@ -2,7 +2,7 @@
 #include "genHeader.h"
 
 
-DataManipulation::FlightData DataManipulation::ParseData(char* data)
+DataManipulation::FlightData DataManipulation::ParseData(char* data, char* aircraftNum)
 {
 	// Variables
 	FlightData retData;
@@ -10,6 +10,7 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 	int counter = 0;
 	char* str;
 
+	// Parse the first token
 	tempToken = strtok(data, ",");
 	counter++;
 
@@ -44,7 +45,7 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 			retData.bank = strtod(tempToken, &str);
 			break;
 		default:
-
+			retData.aircraftNumber = strtok(aircraftNum, "..//.txt");		// Convert the telemetry data filename (which has the tail number in it) into just the tail number and save to FlightData
 			break;
 		}
 
@@ -57,14 +58,30 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 	return retData;
 }
 
+DataPacket DataManipulation::PrepForTransmission(FlightData data, unsigned int sequenceNumber)
+{
+	// Variables
+	DataPacket packet = {packet.aircraftTailNumber = NULL, packet.packetSequenceNumber = 0, packet.aircraftData = NULL, packet.checksum = -1};
+
+	strcpy(packet.aircraftTailNumber, data.aircraftNumber);																									// Copy the aircraftTailNumber from FlightData data
+	packet.packetSequenceNumber = sequenceNumber;																											// Copy the sequenceNumber from the referenced sequence number
+	sprintf(packet.aircraftData, "%s,%f,%f,%f,%f,%f,%f,%f", data.dateTime, data.x, data.y, data.z, data.weight, data.alt, data.pitch, data.bank);			// Parse the FlightData into a single string (',' as the delimiter) and save
+	packet.checksum = (int)(data.alt + data.pitch + data.bank) / 3;																							// Calculate the checksum and save
+
+
+	return packet;
+}
+
 
 int DataManipulation::ParseFromInput(char* fileName)
 {
 	// Variables
 	FlightData data;
+	DataPacket packet;
 	FILE* stream = NULL;
 	char tempLine[MAX_CHAR] = "";
 	bool done = false;
+	unsigned int lineNumber = 0;
 
 	// Check that the file connects
 	if (NULL == (stream = fopen(fileName, "r")))
@@ -72,18 +89,20 @@ int DataManipulation::ParseFromInput(char* fileName)
 		return FAIL_TO_CONNECT;
 	}
 
+	// Loop read the file until completion (When the "break;" is hit/the EOF)
 	while (done == false)
 	{
 		// Check that the EOF has not been reached
 		if (NULL != fgets(tempLine, MAX_CHAR, stream))
 		{
-			// Call a parsing function
-			data = ParseData(tempLine);
+			lineNumber++;													// Increment the line number to remember the sequence
 
-			printf("%s\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n", data.dateTime, data.x, data.y, data.z, data.weight, data.alt, data.pitch, data.bank);
+			data = ParseData(tempLine, fileName);							// Call parsing function to parse into token data
+			packet = PrepForTransmission(data, lineNumber);					// Call prep function to prepare the parsed data into the DataPacketFormat to be sent
+			// Send packet through connection
+			/******************************************* MISSING CONNECTION SENDER METHOD TO FINISH ***********************************************************************/
 
-			// Clear the string
-			memset(tempLine, 0, sizeof(tempLine));
+			memset(tempLine, 0, sizeof(tempLine));							// Clear the string
 		}
 		else
 		{

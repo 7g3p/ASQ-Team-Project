@@ -15,10 +15,3 @@
 using namespace std;
 
 // Global Structs
-typedef struct DataPacketFormat
-{
-	char* aircraftTailNumber;
-	unsigned int packetSequenceNumber;
-	char* aircraftData;
-	int checksum;
-}DataPacket;
