@@ -18,15 +18,18 @@
     <ClCompile Include="connection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dataPrep.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="dataManipulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="dataManipulation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="genHeader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

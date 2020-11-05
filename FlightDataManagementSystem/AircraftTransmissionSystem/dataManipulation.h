@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <string.h>
-#include "Header.h"
+#include <string>
+
+using namespace std;
+
 
 class DataManipulation
 {
 private:
+
 	typedef struct flightData
 	{
 		char* dateTime;
@@ -19,19 +22,10 @@ private:
 		double bank;
 	}FlightData;
 
+	FlightData ParseData(char* data);
+
 public:
 
-	DataPacket ParseFromInput(char* fileName)
-	{
-		DataPacket retData;
-
-
-
-		return retData;
-	}
-
-
-
-
-
+	int static ParseFromInput(char* fileName);
 };
+
