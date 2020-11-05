@@ -5,9 +5,10 @@
 DataManipulation::FlightData DataManipulation::ParseData(char* data)
 {
 	// Variables
-	FlightData retData;
+	FlightData retData = { retData.dateTime = NULL, retData.x = NULL, retData.y = NULL, retData.z = NULL, retData.weight = NULL, retData.alt = 0.0, retData.pitch = 0.0, retData.bank = 0.0};
 	char* tempToken;
 	int counter = 0;
+	char* str;
 
 	tempToken = strtok(data, ",");
 	counter++;
@@ -19,31 +20,32 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 		switch (counter)
 		{
 		case 1:
-			retData.dateTime;
+			strcpy(retData.dateTime, tempToken);
 			break;
 		case 2:
-			retData.x;
+			strcpy(retData.x, tempToken);
 			break;
 		case 3:
-			retData.y;
+			strcpy(retData.y, tempToken);
 			break;
 		case 4:
-			retData.z;
+			strcpy(retData.z, tempToken);
 			break;
 		case 5:
-			retData.weight;
+			strcpy(retData.weight, tempToken);
 			break;
 		case 6:
-			retData.alt;
+			retData.alt = strtod(tempToken, &str);
 			break;
 		case 7:
-			retData.pitch;
+			retData.pitch = strtod(tempToken, &str);
 			break;
 		case 8:
-			retData.bank;
+			retData.bank = strtod(tempToken, &str);
 			break;
 		default:
 
+			break;
 		}
 
 		// Seperate the new token from the string

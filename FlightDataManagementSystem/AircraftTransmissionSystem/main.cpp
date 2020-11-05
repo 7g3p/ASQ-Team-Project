@@ -5,7 +5,7 @@
 #include "genHeader.h"
 #include "dataManipulation.h"
 
-int main(int argc, char* argv)
+int main(int argc, char** argv)
 {
 	DataManipulation temp;
 

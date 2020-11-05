@@ -13,10 +13,10 @@ private:
 	typedef struct flightData
 	{
 		char* dateTime;
-		double x;
-		double y;
-		double z;
-		double weight;
+		char* x;
+		char* y;
+		char* z;
+		char* weight;
 		double alt;
 		double pitch;
 		double bank;
