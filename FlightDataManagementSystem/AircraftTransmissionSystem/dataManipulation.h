@@ -12,17 +12,17 @@ private:
 
 	typedef struct flightData
 	{
-		char* dateTime;
-		char* x;
-		char* y;
-		char* z;
-		char* weight;
+		char dateTime[20];
+		double x;
+		double y;
+		double z;
+		double weight;
 		double alt;
 		double pitch;
 		double bank;
 	}FlightData;
 
-	FlightData ParseData(char* data);
+	FlightData static ParseData(char* data);
 
 public:
 

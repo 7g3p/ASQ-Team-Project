@@ -5,7 +5,7 @@
 DataManipulation::FlightData DataManipulation::ParseData(char* data)
 {
 	// Variables
-	FlightData retData = { retData.dateTime = NULL, retData.x = NULL, retData.y = NULL, retData.z = NULL, retData.weight = NULL, retData.alt = 0.0, retData.pitch = 0.0, retData.bank = 0.0};
+	FlightData retData;
 	char* tempToken;
 	int counter = 0;
 	char* str;
@@ -23,16 +23,16 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 			strcpy(retData.dateTime, tempToken);
 			break;
 		case 2:
-			strcpy(retData.x, tempToken);
+			retData.x = strtod(tempToken, &str);
 			break;
 		case 3:
-			strcpy(retData.y, tempToken);
+			retData.y = strtod(tempToken, &str);
 			break;
 		case 4:
-			strcpy(retData.z, tempToken);
+			retData.z = strtod(tempToken, &str);
 			break;
 		case 5:
-			strcpy(retData.weight, tempToken);
+			retData.weight = strtod(tempToken, &str);
 			break;
 		case 6:
 			retData.alt = strtod(tempToken, &str);
@@ -49,7 +49,7 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 		}
 
 		// Seperate the new token from the string
-		tempToken = strtok(data, ",");
+		tempToken = strtok(NULL, ",\n");
 		counter++;
 	}
 
@@ -61,6 +61,7 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data)
 int DataManipulation::ParseFromInput(char* fileName)
 {
 	// Variables
+	FlightData data;
 	FILE* stream = NULL;
 	char tempLine[MAX_CHAR] = "";
 	bool done = false;
@@ -77,7 +78,9 @@ int DataManipulation::ParseFromInput(char* fileName)
 		if (NULL != fgets(tempLine, MAX_CHAR, stream))
 		{
 			// Call a parsing function
-			printf("%s\n\n", tempLine);
+			data = ParseData(tempLine);
+
+			printf("%s\n%f\n%f\n%f\n%f\n%f\n%f\n%f\n", data.dateTime, data.x, data.y, data.z, data.weight, data.alt, data.pitch, data.bank);
 
 			// Clear the string
 			memset(tempLine, 0, sizeof(tempLine));
@@ -96,6 +99,7 @@ int DataManipulation::ParseFromInput(char* fileName)
 		}
 	}
 
+	// Check that the stream was able to close properly
 	if (0 != fclose(stream))
 	{
 		return FAIL_TO_CLOSE;
