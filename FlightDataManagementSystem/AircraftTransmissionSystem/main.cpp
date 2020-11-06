@@ -1,3 +1,11 @@
+/*
+* FILE : main.cpp
+* PROJECT : SENG3020 - Milestone #2
+* PROGRAMMER : Stephen Perrin, Kieran Campbell, Zena Potts, Karson Lai
+* FIRST VERSION : 2020-11-05
+* DESCRIPTION :
+* This file contains the main function, getString function, and checkAircraftNumber function.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -17,7 +25,7 @@ int main(int argc, char** argv)
 	char userInput[INPUT_CHAR] = "";
 	char aircraftFile[MAX_CHAR] = "";
 	DataManipulation temp;
-	TCPConnection *conn = new TCPConnection();
+	TCPConnection* conn = new TCPConnection();
 
 	try
 	{
@@ -31,10 +39,11 @@ int main(int argc, char** argv)
 			return -4;
 		}
 	}
-	
-	
+
+	// Loop the telemetry data transmission 
 	do
 	{
+		// Loop for getting the telemetry data file
 		do
 		{
 			// Get the aircraftTailNumber from the user

@@ -1,3 +1,12 @@
+/*
+* FILE : genHeader.h
+* PROJECT : SENG3020 - Milestone #2
+* PROGRAMMER : Stephen Perrin, Kieran Campbell, Zena Potts, Karson Lai
+* FIRST VERSION : 2020-11-05
+* DESCRIPTION :
+* This file contains the classes for dataManipulation.cpp and connection.cpp as well as various include files
+* constants, and structs that are used throughout the project.
+*/
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #pragma comment (lib, "Ws2_32.lib")
@@ -19,7 +28,7 @@
 #define FAIL_TO_SEND		-4
 #define MAX_CHAR			110
 #define INPUT_CHAR			10
-#define CHAR_LIM 100
+#define CHAR_LIM			100
 
 // Namespace
 using namespace std;
@@ -34,6 +43,10 @@ typedef struct DataPacketFormat
 }DataPacket;
 
 // Classes
+/*
+* NAME : TCPConnection
+* PURPOSE : This class creates, instatiates, and sends telemetry data over a TCP socket connection
+*/
 class TCPConnection
 {
 private:
@@ -52,6 +65,10 @@ public:
 	int SendData(DataPacket data);
 };
 
+/*
+* NAME : DataManipulation
+* PURPOSE : This class reads raw telemetry data, parses it into useable tokens, and preps for sending
+*/
 class DataManipulation
 {
 private:

@@ -1,3 +1,11 @@
+/*
+* FILE : dataManipulation.cpp
+* PROJECT : SENG3020 - Milestone #2
+* PROGRAMMER : Stephen Perrin, Kieran Campbell, Zena Potts, Karson Lai
+* FIRST VERSION : 2020-11-05
+* DESCRIPTION :
+* This file contains the methods for the DataManipulation class.
+*/
 #include "genHeader.h"
 
 /*
@@ -128,6 +136,7 @@ int DataManipulation::ParseFromInput(char* fileName, TCPConnection conn)
 
 				data = ParseData(tempLine, fileName);							// Call parsing function to parse into token data
 				packet = PrepForTransmission(data, lineNumber);					// Call prep function to prepare the parsed data into the DataPacketFormat to be sent
+				Sleep(1000);
 				if (0 != conn.SendData(packet))									// Send packet through connection
 				{
 					return FAIL_TO_SEND;
