@@ -1,4 +1,3 @@
-#include "dataManipulation.h"
 #include "genHeader.h"
 
 /*
@@ -100,7 +99,7 @@ DataPacket DataManipulation::PrepForTransmission(FlightData data, unsigned int s
 * RETURNS :
 *		int : The ret code. 0 is success otherwise is failure
 */
-int DataManipulation::ParseFromInput(char* fileName)
+int DataManipulation::ParseFromInput(char* fileName, TCPConnection conn)
 {
 	// Variables
 	FlightData data;
@@ -129,8 +128,10 @@ int DataManipulation::ParseFromInput(char* fileName)
 
 				data = ParseData(tempLine, fileName);							// Call parsing function to parse into token data
 				packet = PrepForTransmission(data, lineNumber);					// Call prep function to prepare the parsed data into the DataPacketFormat to be sent
-				// Send packet through connection
-				/******************************************* MISSING CONNECTION SENDER METHOD TO FINISH ***********************************************************************/
+				if (0 != conn.SendData(packet))									// Send packet through connection
+				{
+					return FAIL_TO_SEND;
+				}
 
 				memset(tempLine, 0, sizeof(tempLine));							// Clear the string
 			}

@@ -1,10 +1,10 @@
-#include "connection.h"
+#include "genHeader.h"
 
 
 TCPConnection::TCPConnection()
 {
 	ipAddress = "127.0.0.1";
-	port = 54000;
+	port = 8080;
 
 	// Initialize winsock
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
@@ -23,7 +23,7 @@ TCPConnection::TCPConnection()
 
 	// Fill in a hint structure
 	server.sin_family = AF_INET;
-	server.sin_port = htons(port);
+	server.sin_port = 8080; // Used to have htons(port)
 	inet_pton(AF_INET, ipAddress.c_str(), &server.sin_addr);
 
 }
@@ -37,7 +37,7 @@ TCPConnection::~TCPConnection()
 void TCPConnection::ConnectToSocket()
 {
 	// Check that it isn't already connected
-	if (IsConnected)
+	if (IsConnected != true)
 	{
 		// Connect to server
 		if (SOCKET_ERROR == connect(sock, (sockaddr*)&server, sizeof(server)))

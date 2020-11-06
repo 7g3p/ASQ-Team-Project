@@ -5,7 +5,6 @@
 #include <conio.h>
 #include <ctype.h>
 #include "genHeader.h"
-#include "dataManipulation.h"
 
 // Prototypes
 int checkAircraftNumber(char* dest, char* airNum);
@@ -18,6 +17,20 @@ int main(int argc, char** argv)
 	char userInput[INPUT_CHAR] = "";
 	char aircraftFile[MAX_CHAR] = "";
 	DataManipulation temp;
+	TCPConnection *conn = new TCPConnection();
+
+	try
+	{
+		conn->ConnectToSocket();
+	}
+	catch (int retError)
+	{
+		if (retError != 0)
+		{
+			return -4;
+		}
+	}
+	
 	
 	do
 	{
@@ -41,7 +54,7 @@ int main(int argc, char** argv)
 		} while (cont);
 
 
-		temp.ParseFromInput(aircraftFile);
+		temp.ParseFromInput(aircraftFile, *conn);
 
 		// Check if the user wishes to exit
 		printf("Press 'q' to Quit.\\nn");

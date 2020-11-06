@@ -129,8 +129,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="connection.h" />
-    <ClInclude Include="dataManipulation.h" />
     <ClInclude Include="genHeader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
