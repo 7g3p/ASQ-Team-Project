@@ -84,7 +84,7 @@ DataPacket DataManipulation::PrepForTransmission(FlightData data, unsigned int s
 
 	strcpy(packet.aircraftTailNumber, data.aircraftNumber);																									// Copy the aircraftTailNumber from FlightData data
 	packet.packetSequenceNumber = sequenceNumber;																											// Copy the sequenceNumber from the referenced sequence number
-	sprintf(packet.aircraftData, "%s,%f,%f,%f,%f,%f,%f,%f", data.dateTime, data.x, data.y, data.z, data.weight, data.alt, data.pitch, data.bank);			// Parse the FlightData into a single string (',' as the delimiter) and save
+	sprintf(packet.aircraftData, ",%s,%f,%f,%f,%f,%f,%f,%f,", data.dateTime, data.x, data.y, data.z, data.weight, data.alt, data.pitch, data.bank);			// Parse the FlightData into a single string (',' as the delimiter) and save
 	packet.checksum = (int)(data.alt + data.pitch + data.bank) / 3;																							// Calculate the checksum and save
 
 
