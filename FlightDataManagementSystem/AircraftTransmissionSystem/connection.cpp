@@ -1,9 +1,6 @@
 #include "connection.h"
 
 
-// Need to link with Ws2_32.lib
-#pragma comment (lib, "Ws2_32.lib")
-
 TCPConnection::TCPConnection()
 {
 	ipAddress = "127.0.0.1";

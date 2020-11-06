@@ -1,6 +1,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "wsock32.lib")
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <Windows.h>
@@ -20,10 +21,10 @@ private:
 	string ipAddress;
 	int port;
 	WSADATA wsa;
-	static SOCKET sock;
-	static sockaddr_in server;
-	static HOSTENT* host;
-	static bool IsConnected;
+	SOCKET sock;
+	sockaddr_in server;
+	HOSTENT* host;
+	bool IsConnected;
 public:
 	TCPConnection();
 	~TCPConnection();
