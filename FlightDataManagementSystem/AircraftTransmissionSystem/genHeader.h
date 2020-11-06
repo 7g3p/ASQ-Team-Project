@@ -43,6 +43,7 @@ private:
 	SOCKET sock;
 	sockaddr_in server;
 	HOSTENT* host;
+	fd_set master;
 	bool IsConnected;
 public:
 	TCPConnection();

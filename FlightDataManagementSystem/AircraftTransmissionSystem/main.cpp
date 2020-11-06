@@ -21,6 +21,7 @@ int main(int argc, char** argv)
 
 	try
 	{
+		printf("Waiting for a Connection...\n");
 		conn->ConnectToSocket();
 	}
 	catch (int retError)

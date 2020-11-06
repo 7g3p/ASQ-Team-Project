@@ -23,9 +23,16 @@ TCPConnection::TCPConnection()
 
 	// Fill in a hint structure
 	server.sin_family = AF_INET;
-	server.sin_port = 8080; // Used to have htons(port)
-	inet_pton(AF_INET, ipAddress.c_str(), &server.sin_addr);
+	server.sin_port = htons(54000); // Used to have htons(port)
+	server.sin_addr.S_un.S_addr = INADDR_ANY;
+	
+	bind(sock, (sockaddr*)&server, sizeof(server));
 
+	listen(sock, SOMAXCONN);
+
+	FD_ZERO(&master);
+
+	FD_SET(sock, &master);
 }
 
 TCPConnection::~TCPConnection()
@@ -36,21 +43,15 @@ TCPConnection::~TCPConnection()
 
 void TCPConnection::ConnectToSocket()
 {
-	// Check that it isn't already connected
-	if (IsConnected != true)
+	// Variables
+	SOCKET client = NULL;
+
+	while (IsConnected == false)
 	{
-		// Connect to server
-		if (SOCKET_ERROR == connect(sock, (sockaddr*)&server, sizeof(server)))
-		{
-			printf("Can't connect to server. Error code: %d", WSAGetLastError());
-			closesocket(sock);
-			WSACleanup();
-			IsConnected = false;
-			throw - 3;
-		}
-		else
+		if (INVALID_SOCKET != (client = accept(sock, nullptr, nullptr)))
 		{
 			IsConnected = true;
+			FD_SET(client, &master);
 		}
 	}
 }
@@ -62,7 +63,7 @@ int TCPConnection::SendData(DataPacket data)
 
 	sprintf(msg, "%s,%s,%s,%s", data.aircraftTailNumber, to_string(data.packetSequenceNumber).c_str(), data.aircraftData, to_string(data.checksum).c_str());
 
-	if (SOCKET_ERROR == send(sock, msg, sizeof(msg) + 1, 0))
+	if (SOCKET_ERROR == send(master.fd_array[1], msg, sizeof(msg) + 1, 0))
 	{
 		printf("Failed to send data. Error code: %d", WSAGetLastError());
 		return -1;
