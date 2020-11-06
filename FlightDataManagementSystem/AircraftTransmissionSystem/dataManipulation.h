@@ -3,12 +3,15 @@
 #include <iostream>
 #include <string>
 
+// Constant
+#define CHAR_LIM 100
+
 // Structs
 typedef struct DataPacketFormat
 {
-	char* aircraftTailNumber;
+	char aircraftTailNumber[CHAR_LIM];
 	unsigned int packetSequenceNumber;
-	char* aircraftData;
+	char aircraftData[CHAR_LIM];
 	int checksum;
 }DataPacket;
 

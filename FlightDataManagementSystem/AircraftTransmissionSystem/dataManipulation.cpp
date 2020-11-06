@@ -1,7 +1,16 @@
 #include "dataManipulation.h"
 #include "genHeader.h"
 
-
+/*
+* FUNCTION : ParseData
+* DESCRIPTION :
+*	This function parses the raw telemetry data into understandable tokens that will be packaged and sent
+* PARAMETERS :
+*	char* data   : The raw telemetry data
+*	char* aircraftNum : The aircraftNumber (in filename form)
+* RETURNS :
+*		FlightData : The parsed tokens of the telemetry data
+*/
 DataManipulation::FlightData DataManipulation::ParseData(char* data, char* aircraftNum)
 {
 	// Variables
@@ -58,10 +67,20 @@ DataManipulation::FlightData DataManipulation::ParseData(char* data, char* aircr
 	return retData;
 }
 
+/*
+* FUNCTION : PrepForTransmission
+* DESCRIPTION :
+*	This function prepares the parsed telemetry data for sending by converting to the dataPacketFormat struct
+* PARAMETERS :
+*	FlightData data   : The parsed telemetry data
+*	unsigned int sequenceNumber : The sequence number of the telemetry data to maintain order
+* RETURNS :
+*		DataPacket : The prepared telemetry data in the DataPacket format
+*/
 DataPacket DataManipulation::PrepForTransmission(FlightData data, unsigned int sequenceNumber)
 {
 	// Variables
-	DataPacket packet = {packet.aircraftTailNumber = NULL, packet.packetSequenceNumber = 0, packet.aircraftData = NULL, packet.checksum = -1};
+	DataPacket packet;
 
 	strcpy(packet.aircraftTailNumber, data.aircraftNumber);																									// Copy the aircraftTailNumber from FlightData data
 	packet.packetSequenceNumber = sequenceNumber;																											// Copy the sequenceNumber from the referenced sequence number
@@ -72,7 +91,15 @@ DataPacket DataManipulation::PrepForTransmission(FlightData data, unsigned int s
 	return packet;
 }
 
-
+/*
+* FUNCTION : ParseFromInput
+* DESCRIPTION :
+*	This function parses the raw telemetry data from the file into individual data points
+* PARAMETERS :
+*	char* filename   : The telemetry data filename
+* RETURNS :
+*		int : The ret code. 0 is success otherwise is failure
+*/
 int DataManipulation::ParseFromInput(char* fileName)
 {
 	// Variables
@@ -95,14 +122,18 @@ int DataManipulation::ParseFromInput(char* fileName)
 		// Check that the EOF has not been reached
 		if (NULL != fgets(tempLine, MAX_CHAR, stream))
 		{
-			lineNumber++;													// Increment the line number to remember the sequence
+			// Check that the end has been reached but not the EOF
+			if (3 < strlen(tempLine))
+			{
+				lineNumber++;													// Increment the line number to remember the sequence
 
-			data = ParseData(tempLine, fileName);							// Call parsing function to parse into token data
-			packet = PrepForTransmission(data, lineNumber);					// Call prep function to prepare the parsed data into the DataPacketFormat to be sent
-			// Send packet through connection
-			/******************************************* MISSING CONNECTION SENDER METHOD TO FINISH ***********************************************************************/
+				data = ParseData(tempLine, fileName);							// Call parsing function to parse into token data
+				packet = PrepForTransmission(data, lineNumber);					// Call prep function to prepare the parsed data into the DataPacketFormat to be sent
+				// Send packet through connection
+				/******************************************* MISSING CONNECTION SENDER METHOD TO FINISH ***********************************************************************/
 
-			memset(tempLine, 0, sizeof(tempLine));							// Clear the string
+				memset(tempLine, 0, sizeof(tempLine));							// Clear the string
+			}
 		}
 		else
 		{

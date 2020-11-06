@@ -2,33 +2,64 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <conio.h>
+#include <ctype.h>
 #include "genHeader.h"
 #include "dataManipulation.h"
 
-
+// Prototypes
 int checkAircraftNumber(char* dest, char* airNum);
+void getString(char* retString);
 
 int main(int argc, char** argv)
 {
 	// Variables
+	bool cont = false;
+	char userInput[INPUT_CHAR] = "";
 	char aircraftFile[MAX_CHAR] = "";
 	DataManipulation temp;
-
-	// Check that the aircraft number in argv[argc - 1] is one of the currently obtained telemetry data files; else notify the user of an incorrect aircraft number and exit the program
-	if ( NO_ERRORS != checkAircraftNumber(aircraftFile, argv[argc - 1 ]))
-	{
-		printf("Invalid Aircraft number. Telemetry Data does not exist for that number.\n");
-		return -1;
-	}
-
-
-	temp.ParseFromInput(aircraftFile);
 	
+	do
+	{
+		do
+		{
+			// Get the aircraftTailNumber from the user
+			printf("Enter the Aircraft Tail Number (Exact match. E.g. 'C-FGAX'): ");
+			getString(userInput);
 
+			// Check that the aircraft number in argv[argc - 1] is one of the currently obtained telemetry data files; else notify the user of an incorrect aircraft number and exit the program
+			if (NO_ERRORS != checkAircraftNumber(aircraftFile, userInput))
+			{
+				printf("Invalid Aircraft number. Telemetry Data does not exist for that number.\n");
+				cont = true;
+			}
+			else
+			{
+				cont = false;
+			}
+
+		} while (cont);
+
+
+		temp.ParseFromInput(aircraftFile);
+
+		// Check if the user wishes to exit
+		printf("Press 'q' to Quit.\\nn");
+	} while ('q' != getch());
 
 	return 0;
 }
 
+/*
+* FUNCTION : checkAircraftNumber
+* DESCRIPTION :
+*	This function checks that the inputed airNum is valid and can connect to a telemetry data file
+* PARAMETERS :
+*	char* dest   : The destination string to hold the converted airNum to its filename
+*	char* airNum : The aircraftNumber to be checked
+* RETURNS :
+*		int : Ret code. -1 is failure; 0 is success
+*/
 int checkAircraftNumber(char* dest, char* airNum)
 {
 	// Variables
@@ -47,4 +78,23 @@ int checkAircraftNumber(char* dest, char* airNum)
 	strcpy(dest, temp);
 
 	return NO_ERRORS;
+}
+
+/*
+* FUNCTION : getString
+* DESCRIPTION :
+*	This function gets a string from the user
+* PARAMETERS :
+*	N/A
+* RETURNS :
+*	N/A
+*/
+void getString(char* retString)
+{
+	// Variables
+	char temp[INPUT_CHAR] = "";
+
+	fgets(temp, INPUT_CHAR, stdin);
+
+	strcpy(retString, (const char*)strtok(temp, "\n"));
 }

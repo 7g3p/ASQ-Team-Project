@@ -9,9 +9,8 @@
 #define FAIL_TO_CONNECT		-1
 #define FAIL_TO_READ		-2
 #define FAIL_TO_CLOSE		-3
-#define MAX_CHAR			100
+#define MAX_CHAR			110
+#define INPUT_CHAR			10
 
 // Namespace
 using namespace std;
-
-// Global Structs
